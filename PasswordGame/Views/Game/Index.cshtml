@@ -1,0 +1,72 @@
+﻿@model GameViewModel
+
+@{
+
+}
+
+<script>
+    function resizeTextarea(textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px'; // 5px
+    }
+
+    function getQueryParam(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+</script>
+@{
+    if (!Model.PasswordIsComplete)
+    {
+        <div class="text-center">
+            <h2>Введите пароль!</h2>
+            <br />
+
+            <form action="/Game/CheckPassword" method="get">
+                <textarea style="overflow:hidden;resize:none"
+                      placeholder="Введите пароль"
+                      id="passwordTextarea"
+                      name="password"
+                      oninput="resizeTextarea(this)"
+                      cols=60
+                      rows=1></textarea>
+                <br />
+                <input class="btn btn-info" type="submit" value="Проверить" />
+            </form>
+
+            <script>
+                const passwordValue = getQueryParam("password");
+                const textarea = document.getElementById("passwordTextarea");
+
+                textarea.value = passwordValue;
+            </script>
+        </div>
+    }
+
+}
+
+
+@Html.Raw(Model.HtmlResult)
+
+@{
+    if (Model.PasswordIsComplete)
+    {
+        <br />
+        <div class="container">
+            <ul class=" " style="    display: flex;
+                    flex-direction: row;
+                    padding-left: 0;
+                    margin-bottom: 0;
+                    list-style: none;
+                    justify-content: center;
+                    align-items: center; gap:22px">
+                <li class="nav-item">
+                    <a asp-controller="Game" asp-action="Index" class="btn btn-success rounded nav-link text-white" style="width:100%">CHANGE</a>
+                </li>
+                <li class="nav-item">
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-primary rounded nav-link text-white" style="width:100%">SAVE</a>
+                </li>
+            </ul>
+        </div>
+    }
+}
